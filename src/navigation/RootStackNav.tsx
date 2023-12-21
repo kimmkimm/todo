@@ -1,13 +1,20 @@
 import {createStackNavigator} from '@react-navigation/stack';
+import {useUserContext} from 'contexts/UserContext';
 import React from 'react';
-import {Home, Instructions} from 'screens';
 
-const nav = createStackNavigator();
+import {AuthedStackNav} from './AuthedStackNav';
+import {UnauthedStackNav} from './UnauthedStackNav';
+
+const rootNav = createStackNavigator();
 export const RootStackNav: React.FC = () => {
+  const userContext = useUserContext();
   return (
-    <nav.Navigator initialRouteName={Home.name}>
-      <nav.Screen name="Home" component={Home} options={{headerShown: false}} />
-      <nav.Screen name="Instructions" component={Instructions} />
-    </nav.Navigator>
+    <rootNav.Navigator screenOptions={{headerShown: false}}>
+      {userContext.isLoggedIn ? (
+        <rootNav.Screen name="Authed" component={AuthedStackNav} />
+      ) : (
+        <rootNav.Screen name="Unauthed" component={UnauthedStackNav} />
+      )}
+    </rootNav.Navigator>
   );
 };
