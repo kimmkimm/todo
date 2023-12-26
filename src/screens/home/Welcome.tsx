@@ -11,7 +11,7 @@ export const Welcome: React.FC = () => {
       <Logo />
       <Text h1>Welcome</Text>
       <View>
-        <Button onPress={() => navigation.navigate('Instructions')} title="登録する" />
+        <Button onPress={() => navigation.navigate('Add')} title="登録する" />
       </View>
     </View>
   );

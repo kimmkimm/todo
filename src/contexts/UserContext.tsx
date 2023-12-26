@@ -23,6 +23,7 @@ export const UserContextProvider: React.FC<React.PropsWithChildren> = ({children
   const contextValue: ContextValueType = {
     signup: async (userName, password) => {
       await AuthService.signup(userName, password);
+      setUserName('');
     },
     login: async (userName, password) => {
       await AuthService.login(userName, password);
