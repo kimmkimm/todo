@@ -15,6 +15,7 @@
     "reset-cache": "node .script/runner.js reset-cache",
     "reset-cache:all": "node .script/runner.js reset-cache --all",
     "reset-cache:interactive": "node .script/runner.js reset-cache --interactive",
+    "api:gen-client": "openapi-generator-cli generate -g typescript-fetch -i https://raw.githubusercontent.com/fintan-contents/mobile-app-hands-on-backend/main/rest-api-specification/openapi.yaml -o src/backend/generated-rest-client --additional-properties supportsES6=true,typescriptThreePlus=true",
     "pod-install": "cd ios && bundle exec pod install --repo-update",
     "postinstall": "run-s postinstall:*",
     "postinstall:patch-package": "patch-package"
@@ -28,17 +29,20 @@
     "expo-build-properties": "~0.8.3",
     "expo-splash-screen": "~0.20.5",
     "expo-status-bar": "~1.6.0",
+    "formik": "^2.2.6",
     "react": "18.2.0",
     "react-native": "0.72.4",
     "react-native-elements": "~3.4.0",
     "react-native-gesture-handler": "~2.12.0",
     "react-native-reanimated": "~3.3.0",
     "react-native-safe-area-context": "4.6.3",
-    "react-native-screens": "~3.22.0"
+    "react-native-screens": "~3.22.0",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",
     "@expo/config-plugins": "~7.2.2",
+    "@openapitools/openapi-generator-cli": "^2.7.0",
     "@types/jest": "<30.0.0",
     "@types/react": "~18.2.14",
     "@types/react-test-renderer": "18.0.0",
@@ -65,5 +69,7 @@
     "titleTemplate": "{title}",
     "ancestorSeparator": " › "
   },
-  "private": true
+  "private": true,
+  "name": "todo",
+  "version": "1.0.0"
 }

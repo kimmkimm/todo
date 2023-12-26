@@ -1,7 +1,7 @@
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import {FilterType, TodoFilter, TodoList} from 'components/parts';
 import React, {useCallback, useContext, useState} from 'react';
-import {Alert, StyleSheet, View} from 'react-native';
+import {Alert, StyleSheet, View, ActivityIndicator} from 'react-native';
 import {Icon, ThemeContext} from 'react-native-elements';
 import {Todo, TodoService} from 'services';
 
@@ -20,18 +20,28 @@ export const TodoBoard: React.FC = () => {
   const {theme} = useContext(ThemeContext);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filterType, setFilterType] = useState<FilterType>(FilterType.ALL);
+  const [loading, setLoading] = useState(false);
+  const [processingTodos, setProcessingTodos] = useState<number[]>([]);
 
   useFocusEffect(
     useCallback(() => {
     let isActive = true;
 
+    setLoading(true);
     TodoService.getTodos()
       .then(response => {
         if (isActive) {
           setTodos(response);
         }
       })
-      .catch(() => {});
+      .catch(error => {
+        console.log(error);
+      })
+      .finally(() => {
+        if (isActive) {
+          setLoading(false);
+        }
+      });
 
     return () => {
       isActive = false;
@@ -44,13 +54,19 @@ export const TodoBoard: React.FC = () => {
     if (!target) {
       return;
     }
+    setProcessingTodos(prevs => [id, ...prevs]);
     TodoService.putTodo(id, !target.completed)
       .then(returnedTodo =>
         setTodos(prevTodos => {
           return prevTodos.map(todo => (todo.id === id ? returnedTodo : todo));
         }),
       )
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => {
+        setProcessingTodos(prevs => {
+          return prevs.filter(processedId => processedId !== id);
+        });
+      });
   };
 
   const removeTodo = (id: number) => {
@@ -67,6 +83,7 @@ export const TodoBoard: React.FC = () => {
         contentContainerStyle={styles.todoListContainer}
         toggleTodoCompletion={toggleTodoCompletion}
         removeTodo={removeTodo}
+        processingTodos={processingTodos}
       />
       <Icon
         name="plus"
@@ -79,6 +96,11 @@ export const TodoBoard: React.FC = () => {
           navigation.navigate('TodoForm');
         }}
       />
+      {loading && (
+        <View style={styles.indicatorContainer}>
+          <ActivityIndicator color="red" style={styles.indicator} size="large" />
+        </View>
+      )}
     </View>
   );
 };
@@ -96,5 +118,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 10,
     right: 10,
+  },
+  indicatorContainer: {
+    position: 'absolute',
+    zIndex: 2,
+    width: '100%',
+    flex: 1,
+    alignContent: 'center',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+  },
+  indicator: {
+    flex: 1,
   },
 });
