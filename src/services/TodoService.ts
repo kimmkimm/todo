@@ -16,8 +16,13 @@ const putTodo = async (id: number, completed: boolean) => {
   return await todosApi.putTodo({todoId: id, todoStatus: {completed}});
 };
 
+const deleteTodo = async (id: number) => {
+  return await todosApi.deleteTodo({todoId: id});
+};
+
 export const TodoService = {
   getTodos,
   postTodo,
   putTodo,
+  deleteTodo,
 };
