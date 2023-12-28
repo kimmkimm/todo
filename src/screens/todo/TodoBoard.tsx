@@ -70,7 +70,25 @@ export const TodoBoard: React.FC = () => {
   };
 
   const removeTodo = (id: number) => {
-    Alert.alert('未実装です');
+    const target = todos.find(todo => todo.id === id);
+    if (!target) {
+      return;
+    }
+    TodoService.deleteTodo(id)
+      .then(() => {})
+      .catch(error => {
+        console.log(error);
+      })
+    TodoService.getTodos()
+      .then(response => {
+          setTodos(response);
+      })
+      .catch(error => {
+        console.log(error);
+      })
+      .finally(() => {
+          setLoading(false);
+      });
   };
 
   const showTodos = todos.filter(showFilter[filterType]);

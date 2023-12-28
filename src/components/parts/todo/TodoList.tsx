@@ -32,6 +32,7 @@ export const TodoList: React.FC<Props> = ({
           completed={todo.completed}
           toggleTodoCompletion={toggleTodoCompletion}
           processing={processingTodos.includes(todo.id)}
+          removeTodo={removeTodo}
         />
       )}
       keyExtractor={todo => String(todo.id)}

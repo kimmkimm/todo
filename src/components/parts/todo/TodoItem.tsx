@@ -9,16 +9,18 @@ interface Props {
   completed: boolean;
   processing: boolean;
   toggleTodoCompletion: (id: number) => void;
+  removeTodo: (id: number) => void;
 }
 
-export const TodoItem: React.FC<Props> = ({id, text, completed, toggleTodoCompletion, processing}) => {
+export const TodoItem: React.FC<Props> = ({id, text, completed, toggleTodoCompletion, processing, removeTodo}) => {
   const onToggle = useCallback(() => toggleTodoCompletion(id), [id, toggleTodoCompletion]);
+  const onRemove = useCallback(() => removeTodo(id), [id, removeTodo]);
 
   return (
     <View style={styles.item}>
       <View style={styles.todo}>
         <CheckBox title={text} checked={completed} containerStyle={styles.checkbox} onPress={onToggle} />
-        <Button onPress={() => {TodoService.deleteTodo(id);TodoService.getTodos();}} title="削除" />
+        <Button onPress={onRemove} title="削除" />
       </View>
       {processing && (
         <View style={styles.processing}>
